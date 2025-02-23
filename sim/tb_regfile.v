@@ -3,8 +3,7 @@ module tb_regfile;
 	reg clk;
 	reg reset;
 
-	reg w_en;
-	reg [4:0] w_addr;
+	reg w_en; reg [4:0] w_addr;
 	reg [31:0] w_data;
 
 	reg [4:0] ra_addr;
@@ -74,7 +73,6 @@ module tb_regfile;
 		rb_addr <= 'd0;
 		#20;
 	
-		$fatal;
 		$finish(1);
 	end;
 
