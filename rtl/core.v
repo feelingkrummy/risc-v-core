@@ -1,6 +1,6 @@
 
 module core #(
-	parameter IMEM_SIZE = 4096
+	parameter IMEM_SIZE = 4096,
 	parameter IMEM_INIT_FILE = ""
 ) (
 	input clk,
@@ -49,7 +49,7 @@ module core #(
 		.we_a(),
 		.q_a(),
 
-		// 
+		// Internal IMEM interface
 		.data_b(32'd0),
 		.addr_b(pc[$clog2(IMEM_SIZE)-1:0]),
 		.we_b(1'b0),
@@ -58,5 +58,6 @@ module core #(
 
 
 
+	
 
 endmodule
