@@ -32,8 +32,23 @@ module core #(
 	input [1:0] m_axi_rresp
 );
 
+	// Fetch
 	reg [31:0] pc, next_pc;
 	wire [31:0] instr;
+
+	// Decode
+	wire [6:0] opcode;
+	wire [4:0] rd, rs1, rs2;
+
+	wire is_i_type;
+	wire is_r_type;
+
+	wire is_op;
+
+	wire add_sub;
+	wire logic_arith;
+	
+	wire nop;
 
 	dual_port_ram #(
 		.DATA_WIDTH(32),
@@ -55,6 +70,48 @@ module core #(
 		.we_b(1'b0),
 		.q_b(instr)
 	);
+
+
+	assign opcode = instr[6:0];
+	assign rd = instr[11:7];
+	assign rs1 = instr[19:15];
+	assign rs2 = instr[24:20];
+
+	always @(*)
+	begin
+		case (opcode)
+			OPCODE_OP_IMM : begin
+				is_i_type = 1;
+				is_r_type = 0;
+				is_op = 1;
+
+				add_sub = 0;
+				logic_arith = 0;
+
+				nop = 0;
+			end
+			OPCODE_OP : begin
+				is_i_type = 0;
+				is_r_type = 1;
+				is_op = 1;
+
+				add_sub = instr[30];
+				logic_arith = instr[30];
+
+				nop = 0;
+			end
+			default : begin
+				is_i_type = 0;
+				is_r_type = 0;
+				is_op = 0;
+
+				add_sub = 0;
+				logic_arith = 0;
+
+				nop = 1;
+			end
+		endcase
+	end
 
 
 
